@@ -1,9 +1,16 @@
 'use strict'
-let express = require("express");
-let app = express();
+var app = require("express")();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 
-app.get('/', function(req, res){
-    res.send('Hello World');
+io.on('connection', function(client){
+    console.log('Client connected...');
 });
 
-app.listen(8080);
+app.get('/', function(req, res){
+    res.sendFile(__dirname + '/index.html');
+});
+
+server.listen(8080, function(){
+    console.log('listening on port 8080');
+});
