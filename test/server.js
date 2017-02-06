@@ -29,14 +29,11 @@ describe("Server", function(){
                 
                 client2.on('connect', function(socket){
                     client1.emit('user joined', 'Hello');
-                    client1.on('user joined', function(name){
-                        client1.emit('chat message', message);
-                    });
+                    client1.emit('chat message', message);
                 }); 
                 var messageCount = 0;
                 client2.on('chat message', function(msg){
                     messageCount += 1;
-                    console.log('message received: ' + messageCount + ' : ' + msg);
                     if (messageCount === 1){
                         expect(msg).to.equal(username + ' has joined.')
                     }
