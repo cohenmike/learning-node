@@ -1,21 +1,23 @@
-'use strict'
-var app = require("express")();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+'use strict';
 
-io.on('connection', function(socket){
-    socket.on('user joined', function(name){
-        socket.username = name;
-        io.emit('chat message', name + " has joined.");
-    });
-    socket.on('chat message', function(msg){
-        io.emit('chat message', socket.username + ': ' + msg);
-    });
+const app = require('express')();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const path = require('path');
+
+io.on('connection', (socket) => {
+  socket.on('user joined', (name) => {
+    socket.username = name;
+    io.emit('chat message', `${name} has joined.`);
+  });
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', `${socket.username}: ${msg}`);
+  });
 });
 
 
-app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 server.listen(8080);
